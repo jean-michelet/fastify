@@ -1,8 +1,7 @@
 import { FastifyRouteConfig } from './route'
 import { ContextConfigDefault } from './utils'
 
-export interface FastifyContextConfig {
-}
+export interface FastifyContextConfig {}
 
 /**
  * Route context object. Properties defined here will be available in the route's handler

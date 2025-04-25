@@ -12,26 +12,23 @@ This document contains a set of recommendations when using Fastify.
 - [Running Multiple Instances](#multiple)
 
 ## Use A Reverse Proxy
+
 <a id="reverseproxy"></a>
 
-Node.js is an early adopter of frameworks shipping with an easy-to-use web
-server within the standard library. Previously, with languages like PHP or
-Python, one would need either a web server with specific support for the
-language or the ability to set up some sort of [CGI gateway][cgi] that works
-with the language. With Node.js, one can write an application that _directly_
-handles HTTP requests. As a result, the temptation is to write applications that
-handle requests for multiple domains, listen on multiple ports (i.e. HTTP _and_
-HTTPS), and then expose these applications directly to the Internet to handle
-requests.
+Node.js is an early adopter of frameworks shipping with an easy-to-use web server within the standard library.
+Previously, with languages like PHP or Python, one would need either a web server with specific support for the language
+or the ability to set up some sort of [CGI gateway][cgi] that works with the language. With Node.js, one can write an
+application that _directly_ handles HTTP requests. As a result, the temptation is to write applications that handle
+requests for multiple domains, listen on multiple ports (i.e. HTTP _and_ HTTPS), and then expose these applications
+directly to the Internet to handle requests.
 
-The Fastify team **strongly** considers this to be an anti-pattern and extremely
-bad practice:
+The Fastify team **strongly** considers this to be an anti-pattern and extremely bad practice:
 
 1. It adds unnecessary complexity to the application by diluting its focus.
 2. It prevents [horizontal scalability][scale-horiz].
 
-See [Why should I use a Reverse Proxy if Node.js is Production Ready?][why-use]
-for a more thorough discussion of why one should opt to use a reverse proxy.
+See [Why should I use a Reverse Proxy if Node.js is Production Ready?][why-use] for a more thorough discussion of why
+one should opt to use a reverse proxy.
 
 For a concrete example, consider the situation where:
 
@@ -41,9 +38,8 @@ For a concrete example, consider the situation where:
 1. The app needs to serve multiple domains.
 1. The app needs to serve static resources, e.g. jpeg files.
 
-There are many reverse proxy solutions available, and your environment may
-dictate the solution to use, e.g. AWS or GCP. Given the above, we could use
-[HAProxy][haproxy] or [Nginx][nginx] to solve these requirements:
+There are many reverse proxy solutions available, and your environment may dictate the solution to use, e.g. AWS or GCP.
+Given the above, we could use [HAProxy][haproxy] or [Nginx][nginx] to solve these requirements:
 
 ### HAProxy
 
@@ -164,7 +160,8 @@ backend static-backend
 
 [cgi]: https://en.wikipedia.org/wiki/Common_Gateway_Interface
 [scale-horiz]: https://en.wikipedia.org/wiki/Scalability#Horizontal
-[why-use]: https://web.archive.org/web/20190821102906/https://medium.com/intrinsic/why-should-i-use-a-reverse-proxy-if-node-js-is-production-ready-5a079408b2ca
+[why-use]:
+  https://web.archive.org/web/20190821102906/https://medium.com/intrinsic/why-should-i-use-a-reverse-proxy-if-node-js-is-production-ready-5a079408b2ca
 [haproxy]: https://www.haproxy.org/
 
 ### Nginx
@@ -283,71 +280,63 @@ server {
 [nginx]: https://nginx.org/
 
 ## Kubernetes
+
 <a id="kubernetes"></a>
 
-The `readinessProbe` uses [(by
-default](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes))
-the pod IP as the hostname. Fastify listens on `127.0.0.1` by default. The probe
-will not be able to reach the application in this case. To make it work,
-the application must listen on `0.0.0.0` or specify a custom hostname in
-the `readinessProbe.httpGet` spec, as per the following example:
+The `readinessProbe` uses
+[(by default](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes))
+the pod IP as the hostname. Fastify listens on `127.0.0.1` by default. The probe will not be able to reach the
+application in this case. To make it work, the application must listen on `0.0.0.0` or specify a custom hostname in the
+`readinessProbe.httpGet` spec, as per the following example:
 
 ```yaml
 readinessProbe:
-    httpGet:
-        path: /health
-        port: 4000
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    timeoutSeconds: 3
-    successThreshold: 1
-    failureThreshold: 5
+  httpGet:
+    path: /health
+    port: 4000
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 3
+  successThreshold: 1
+  failureThreshold: 5
 ```
 
 ## Capacity Planning For Production
+
 <a id="capacity"></a>
 
-In order to rightsize the production environment for your Fastify application,
-it is highly recommended that you perform your own measurements against
-different configurations of the environment, which may
-use real CPU cores, virtual CPU cores (vCPU), or even fractional
-vCPU cores. We will use the term vCPU throughout this
-recommendation to represent any CPU type.
+In order to rightsize the production environment for your Fastify application, it is highly recommended that you perform
+your own measurements against different configurations of the environment, which may use real CPU cores, virtual CPU
+cores (vCPU), or even fractional vCPU cores. We will use the term vCPU throughout this recommendation to represent any
+CPU type.
 
-Tools such as [k6](https://github.com/grafana/k6)
-or [autocannon](https://github.com/mcollina/autocannon) can be used for
-conducting the necessary performance tests.
+Tools such as [k6](https://github.com/grafana/k6) or [autocannon](https://github.com/mcollina/autocannon) can be used
+for conducting the necessary performance tests.
 
 That said, you may also consider the following as a rule of thumb:
 
-* To have the lowest possible latency, 2 vCPU are recommended per app
-instance (e.g., a k8s pod). The second vCPU will mostly be used by the
-garbage collector (GC) and libuv threadpool. This will minimize the latency
-for your users, as well as the memory usage, as the GC will be run more
-frequently. Also, the main thread won't have to stop to let the GC run.
+- To have the lowest possible latency, 2 vCPU are recommended per app instance (e.g., a k8s pod). The second vCPU will
+  mostly be used by the garbage collector (GC) and libuv threadpool. This will minimize the latency for your users, as
+  well as the memory usage, as the GC will be run more frequently. Also, the main thread won't have to stop to let the
+  GC run.
 
-* To optimize for throughput (handling the largest possible amount of
-requests per second per vCPU available), consider using a smaller amount of vCPUs
-per app instance. It is totally fine to run Node.js applications with 1 vCPU.
+- To optimize for throughput (handling the largest possible amount of requests per second per vCPU available), consider
+  using a smaller amount of vCPUs per app instance. It is totally fine to run Node.js applications with 1 vCPU.
 
-* You may experiment with an even smaller amount of vCPU, which may provide
-even better throughput in certain use-cases. There are reports of API gateway
-solutions working well with 100m-200m vCPU in Kubernetes.
+- You may experiment with an even smaller amount of vCPU, which may provide even better throughput in certain use-cases.
+  There are reports of API gateway solutions working well with 100m-200m vCPU in Kubernetes.
 
-See [Node's Event Loop From the Inside Out ](https://www.youtube.com/watch?v=P9csgxBgaZ8)
-to understand the workings of Node.js in greater detail and make a
-better determination about what your specific application needs.
+See [Node's Event Loop From the Inside Out ](https://www.youtube.com/watch?v=P9csgxBgaZ8) to understand the workings of
+Node.js in greater detail and make a better determination about what your specific application needs.
 
 ## Running Multiple Instances
+
 <a id="multiple"></a>
 
-There are several use-cases where running multiple Fastify
-apps on the same server might be considered. A common example
-would be exposing metrics endpoints on a separate port,
-to prevent public access, when using a reverse proxy or an ingress
-firewall is not an option.
+There are several use-cases where running multiple Fastify apps on the same server might be considered. A common example
+would be exposing metrics endpoints on a separate port, to prevent public access, when using a reverse proxy or an
+ingress firewall is not an option.
 
-It is perfectly fine to spin up several Fastify instances within the same
-Node.js process and run them concurrently, even in high load systems.
-Each Fastify instance only generates as much load as the traffic it receives,
-plus the memory used for that Fastify instance.
+It is perfectly fine to spin up several Fastify instances within the same Node.js process and run them concurrently,
+even in high load systems. Each Fastify instance only generates as much load as the traffic it receives, plus the memory
+used for that Fastify instance.

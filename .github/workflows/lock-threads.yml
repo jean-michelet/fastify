@@ -23,11 +23,8 @@ jobs:
           issue-inactive-days: '90'
           exclude-any-issue-labels: 'discussion,good first issue,help wanted'
           issue-comment: >
-            This issue has been automatically locked since there
-            has not been any recent activity after it was closed.
+            This issue has been automatically locked since there has not been any recent activity after it was closed.
             Please open a new issue for related bugs.
           pr-comment: >
-            This pull request has been automatically locked since there
-            has not been any recent activity after it was closed.
-            Please open a new issue for related bugs.
-
+            This pull request has been automatically locked since there has not been any recent activity after it was
+            closed. Please open a new issue for related bugs.

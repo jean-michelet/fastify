@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "**/Ecosystem.md"
+      - '**/Ecosystem.md'
 
 permissions:
   contents: read

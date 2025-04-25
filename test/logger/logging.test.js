@@ -268,19 +268,22 @@ t.test('logging', { timeout: 60000 }, async (t) => {
     t.assert.strictEqual(stream.readableLength, 0)
   })
 
-  await t.test('should not log incoming request, outgoing response  and route not found for 404 onBadUrl when disabled', async (t) => {
-    t.plan(1)
-    const stream = split(JSON.parse)
-    const fastify = Fastify({ disableRequestLogging: true, logger: { level: 'info', stream } })
-    t.after(() => fastify.close())
+  await t.test(
+    'should not log incoming request, outgoing response  and route not found for 404 onBadUrl when disabled',
+    async (t) => {
+      t.plan(1)
+      const stream = split(JSON.parse)
+      const fastify = Fastify({ disableRequestLogging: true, logger: { level: 'info', stream } })
+      t.after(() => fastify.close())
 
-    await fastify.ready()
+      await fastify.ready()
 
-    await fastify.inject({ method: 'GET', url: '/%c0' })
+      await fastify.inject({ method: 'GET', url: '/%c0' })
 
-    // no more readable data
-    t.assert.strictEqual(stream.readableLength, 0)
-  })
+      // no more readable data
+      t.assert.strictEqual(stream.readableLength, 0)
+    }
+  )
 
   await t.test('defaults to info level', async (t) => {
     const lines = [

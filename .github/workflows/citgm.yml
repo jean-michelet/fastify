@@ -106,6 +106,6 @@ jobs:
           name: citgm-core-plugins
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo Successfully removed label"
-      - run: "echo Could not remove label"
+      - run: 'echo Successfully removed label'
+      - run: 'echo Could not remove label'
         if: ${{ failure() }}

@@ -3,9 +3,9 @@ name: ci
 on:
   push:
     branches:
-     - main
-     - next
-     - 'v*'
+      - main
+      - next
+      - 'v*'
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -16,7 +16,7 @@ on:
 
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
-  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
   cancel-in-progress: true
 
 permissions:
@@ -24,19 +24,19 @@ permissions:
 
 jobs:
   dependency-review:
-      name: Dependency Review
-      if: github.event_name == 'pull_request'
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-      steps:
-          - name: Check out repo
-            uses: actions/checkout@v4
-            with:
-              persist-credentials: false
+    name: Dependency Review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-          - name: Dependency review
-            uses: actions/dependency-review-action@v4
+      - name: Dependency review
+        uses: actions/dependency-review-action@v4
 
   check-licenses:
     name: Check licenses
@@ -206,8 +206,7 @@ jobs:
 
   automerge:
     if: >
-        github.event_name == 'pull_request' &&
-        github.event.pull_request.user.login == 'dependabot[bot]'
+      github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]'
     needs:
       - test-typescript
       - test-unit

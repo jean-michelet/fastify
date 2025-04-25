@@ -15,10 +15,7 @@ const InternalServerErrorSchema = S.object()
   .prop('error', S.string())
   .prop('message', S.string())
 
-const NotFoundSchema = S.object()
-  .prop('statusCode', S.number())
-  .prop('error', S.string())
-  .prop('message', S.string())
+const NotFoundSchema = S.object().prop('statusCode', S.number()).prop('error', S.string()).prop('message', S.string())
 
 const options = {
   schema: {
@@ -112,25 +109,28 @@ test('serialize the response for a Bad Request error, as defined on the schema',
 
   fastify.post('/', options, handler)
 
-  fastify.listen({ port: 0 }, err => {
+  fastify.listen({ port: 0 }, (err) => {
     t.assert.ifError(err)
 
     const url = `http://localhost:${fastify.server.address().port}/`
 
-    sget({
-      method: 'POST',
-      url,
-      json: true
-    }, (err, response, body) => {
-      t.assert.ifError(err)
-      t.assert.strictEqual(response.statusCode, 400)
-      t.assert.deepStrictEqual(body, {
-        statusCode: 400,
-        error: 'Bad Request',
-        message: 'body must be object'
-      })
-      done()
-    })
+    sget(
+      {
+        method: 'POST',
+        url,
+        json: true
+      },
+      (err, response, body) => {
+        t.assert.ifError(err)
+        t.assert.strictEqual(response.statusCode, 400)
+        t.assert.deepStrictEqual(body, {
+          statusCode: 400,
+          error: 'Bad Request',
+          message: 'body must be object'
+        })
+        done()
+      }
+    )
   })
 })
 

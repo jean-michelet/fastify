@@ -12,7 +12,7 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-    - uses: fastify/action-pr-title@v0
-      with:
-        regex: '/^(build|chore|ci|docs|feat|types|fix|perf|refactor|style|test)(?:\([^\):]*\))?!?:\s/'
-        github-token: ${{ github.token }}
+      - uses: fastify/action-pr-title@v0
+        with:
+          regex: '/^(build|chore|ci|docs|feat|types|fix|perf|refactor|style|test)(?:\([^\):]*\))?!?:\s/'
+          github-token: ${{ github.token }}

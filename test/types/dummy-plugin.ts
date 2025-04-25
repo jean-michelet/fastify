@@ -1,7 +1,7 @@
 import { FastifyPlugin } from '../../fastify'
 
 export interface DummyPluginOptions {
-  foo?: number
+  foo?: number;
 }
 
 declare const DummyPlugin: FastifyPlugin<DummyPluginOptions>

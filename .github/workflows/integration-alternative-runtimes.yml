@@ -3,9 +3,9 @@ name: integration Alternative Runtimes
 on:
   push:
     branches:
-     - main
-     - next
-     - 'v*'
+      - main
+      - next
+      - 'v*'
     paths-ignore:
       - 'docs/**'
       - '*.md'

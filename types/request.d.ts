@@ -4,8 +4,23 @@ import { FastifyInstance } from './instance'
 import { FastifyBaseLogger } from './logger'
 import { FastifyRouteConfig, RouteGenericInterface, RouteHandlerMethod } from './route'
 import { FastifySchema } from './schema'
-import { FastifyRequestType, FastifyTypeProvider, FastifyTypeProviderDefault, ResolveFastifyRequestType } from './type-provider'
-import { ContextConfigDefault, HTTPMethods, RawRequestDefaultExpression, RawServerBase, RawServerDefault, RequestBodyDefault, RequestHeadersDefault, RequestParamsDefault, RequestQuerystringDefault } from './utils'
+import {
+  FastifyRequestType,
+  FastifyTypeProvider,
+  FastifyTypeProviderDefault,
+  ResolveFastifyRequestType
+} from './type-provider'
+import {
+  ContextConfigDefault,
+  HTTPMethods,
+  RawRequestDefaultExpression,
+  RawServerBase,
+  RawServerDefault,
+  RequestBodyDefault,
+  RequestHeadersDefault,
+  RequestParamsDefault,
+  RequestQuerystringDefault
+} from './utils'
 
 type HTTPRequestPart = 'body' | 'query' | 'querystring' | 'params' | 'headers'
 export interface RequestGenericInterface {
@@ -16,7 +31,7 @@ export interface RequestGenericInterface {
 }
 
 export interface ValidationFunction {
-  (input: any): boolean
+  (input: any): boolean;
   errors?: null | ErrorObject[];
 }
 
@@ -38,7 +53,8 @@ export interface RequestRouteOptions<ContextConfig = ContextConfigDefault, Schem
  * FastifyRequest is an instance of the standard http or http2 request objects.
  * It defaults to http.IncomingMessage, and it also extends the relative request object.
  */
-export interface FastifyRequest<RouteGeneric extends RouteGenericInterface = RouteGenericInterface,
+export interface FastifyRequest<
+  RouteGeneric extends RouteGenericInterface = RouteGenericInterface,
   RawServer extends RawServerBase = RawServerDefault,
   RawRequest extends RawRequestDefaultExpression<RawServer> = RawRequestDefaultExpression<RawServer>,
   SchemaCompiler extends FastifySchema = FastifySchema,
@@ -46,12 +62,12 @@ export interface FastifyRequest<RouteGeneric extends RouteGenericInterface = Rou
   ContextConfig = ContextConfigDefault,
   Logger extends FastifyBaseLogger = FastifyBaseLogger,
   RequestType extends FastifyRequestType = ResolveFastifyRequestType<TypeProvider, SchemaCompiler, RouteGeneric>
-// ^ Temporary Note: RequestType has been re-ordered to be the last argument in
-//   generic list. This generic argument is now considered optional as it can be
-//   automatically inferred from the SchemaCompiler, RouteGeneric and TypeProvider
-//   arguments. Implementations that already pass this argument can either omit
-//   the RequestType (preferred) or swap Logger and RequestType arguments when
-//   creating custom types of FastifyRequest. Related issue #4123
+  // ^ Temporary Note: RequestType has been re-ordered to be the last argument in
+  //   generic list. This generic argument is now considered optional as it can be
+  //   automatically inferred from the SchemaCompiler, RouteGeneric and TypeProvider
+  //   arguments. Implementations that already pass this argument can either omit
+  //   the RequestType (preferred) or swap Logger and RequestType arguments when
+  //   creating custom types of FastifyRequest. Related issue #4123
 > {
   id: string;
   params: RequestType['params']; // deferred inference
@@ -78,15 +94,15 @@ export interface FastifyRequest<RouteGeneric extends RouteGenericInterface = Rou
   readonly originalUrl: string;
   readonly protocol: 'http' | 'https';
   readonly method: string;
-  readonly routeOptions: Readonly<RequestRouteOptions<ContextConfig, SchemaCompiler>>
+  readonly routeOptions: Readonly<RequestRouteOptions<ContextConfig, SchemaCompiler>>;
   readonly is404: boolean;
   readonly socket: RawRequest['socket'];
 
-  getValidationFunction(httpPart: HTTPRequestPart): ValidationFunction
-  getValidationFunction(schema: { [key: string]: any }): ValidationFunction
-  compileValidationSchema(schema: { [key: string]: any }, httpPart?: HTTPRequestPart): ValidationFunction
-  validateInput(input: any, schema: { [key: string]: any }, httpPart?: HTTPRequestPart): boolean
-  validateInput(input: any, httpPart?: HTTPRequestPart): boolean
+  getValidationFunction(httpPart: HTTPRequestPart): ValidationFunction;
+  getValidationFunction(schema: { [key: string]: any }): ValidationFunction;
+  compileValidationSchema(schema: { [key: string]: any }, httpPart?: HTTPRequestPart): ValidationFunction;
+  validateInput(input: any, schema: { [key: string]: any }, httpPart?: HTTPRequestPart): boolean;
+  validateInput(input: any, httpPart?: HTTPRequestPart): boolean;
   getDecorator<T>(name: string | symbol): T;
   setDecorator<T = unknown>(name: string | symbol, value: T): void;
 }

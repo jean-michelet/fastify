@@ -11,9 +11,7 @@ function selfCert (opts) {
 
   if (!options.attrs) options.attrs = {}
   if (!options.expires) {
-    options.expires = new Date(
-      now.getFullYear() + 5, now.getMonth() + 1, now.getDate()
-    )
+    options.expires = new Date(now.getFullYear() + 5, now.getMonth() + 1, now.getDate())
   }
 
   log.debug('generating key pair')
@@ -69,16 +67,19 @@ function selfCert (opts) {
     { name: 'subjectKeyIdentifier' },
     {
       name: 'subjectAltName',
-      altNames: [{ type: 6 /* URI */, value: 'DNS: ' + attrs[0].value }].concat((function () {
-        const interfaces = os.networkInterfaces()
+      altNames: [{ type: 6 /* URI */, value: 'DNS: ' + attrs[0].value }].concat(
+        (function () {
+          const interfaces = os.networkInterfaces()
 
-        // fix citgm: skip invalid ips (aix72-ppc64)
-        const ips = Object.values(interfaces).flat()
-          .filter(i => !!forge.util.bytesFromIP(i.address))
-          .map(i => ({ type: 7 /* IP */, ip: i.address }))
+          // fix citgm: skip invalid ips (aix72-ppc64)
+          const ips = Object.values(interfaces)
+            .flat()
+            .filter((i) => !!forge.util.bytesFromIP(i.address))
+            .map((i) => ({ type: 7 /* IP */, ip: i.address }))
 
-        return ips
-      }()))
+          return ips
+        })()
+      )
     }
   ])
 

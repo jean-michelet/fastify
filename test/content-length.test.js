@@ -72,10 +72,7 @@ test('custom 413 with bodyLimit option', async (t) => {
   })
 
   fastify.setErrorHandler(function (err, request, reply) {
-    reply
-      .code(err.statusCode)
-      .type('application/json; charset=utf-8')
-      .send(err)
+    reply.code(err.statusCode).type('application/json; charset=utf-8').send(err)
   })
 
   const response = await fastify.inject({
@@ -105,10 +102,7 @@ test('custom 400 with wrong content-length', async (t) => {
   })
 
   fastify.setErrorHandler(function (err, request, reply) {
-    reply
-      .code(err.statusCode)
-      .type('application/json; charset=utf-8')
-      .send(err)
+    reply.code(err.statusCode).type('application/json; charset=utf-8').send(err)
   })
 
   const response = await fastify.inject({

@@ -119,31 +119,34 @@ const schema = {
   }
 }
 
-const compiler = factory({}, {
-  customOptions: {
-    code: {
-      source: true,
-      lines: true,
-      optimize: 3
-    },
-    removeAdditional: true,
-    useDefaults: true,
-    coerceTypes: true,
-    keywords: [
-      {
-        keyword: 'setDefaultValue',
-        $data: true,
-        // error: false,
-        modifying: true,
-        valid: true,
-        code (keywordCxt) {
-          const { gen, it, schemaValue } = keywordCxt
-          const logicCode = gen.assign(_`${it.parentData}[${it.parentDataProperty}]`, schemaValue)
-          return logicCode
+const compiler = factory(
+  {},
+  {
+    customOptions: {
+      code: {
+        source: true,
+        lines: true,
+        optimize: 3
+      },
+      removeAdditional: true,
+      useDefaults: true,
+      coerceTypes: true,
+      keywords: [
+        {
+          keyword: 'setDefaultValue',
+          $data: true,
+          // error: false,
+          modifying: true,
+          valid: true,
+          code (keywordCxt) {
+            const { gen, it, schemaValue } = keywordCxt
+            const logicCode = gen.assign(_`${it.parentData}[${it.parentDataProperty}]`, schemaValue)
+            return logicCode
+          }
         }
-      }
-    ]
+      ]
+    }
   }
-})
+)
 
 compiler({ schema })

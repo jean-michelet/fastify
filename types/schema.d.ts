@@ -33,7 +33,7 @@ export interface FastifySchemaValidationError {
 }
 
 export interface FastifyValidationResult {
-  (data: any): boolean | SafePromiseLike<any> | { error?: Error, value?: any }
+  (data: any): boolean | SafePromiseLike<any> | { error?: Error; value?: any };
   errors?: FastifySchemaValidationError[] | null;
 }
 

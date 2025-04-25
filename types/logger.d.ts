@@ -5,7 +5,13 @@ import { FastifyRequest } from './request'
 import { RouteGenericInterface } from './route'
 import { FastifySchema } from './schema'
 import { FastifyTypeProvider, FastifyTypeProviderDefault } from './type-provider'
-import { ContextConfigDefault, RawReplyDefaultExpression, RawRequestDefaultExpression, RawServerBase, RawServerDefault } from './utils'
+import {
+  ContextConfigDefault,
+  RawReplyDefaultExpression,
+  RawRequestDefaultExpression,
+  RawServerBase,
+  RawServerDefault
+} from './utils'
 
 import pino from 'pino'
 
@@ -21,7 +27,7 @@ export type Bindings = pino.Bindings
 export type ChildLoggerOptions = pino.ChildLoggerOptions
 
 export interface FastifyBaseLogger extends pino.BaseLogger {
-  child(bindings: Bindings, options?: ChildLoggerOptions): FastifyBaseLogger
+  child(bindings: Bindings, options?: ChildLoggerOptions): FastifyBaseLogger;
 }
 
 // TODO delete FastifyBaseLogger in the next major release. It seems that it is enough to have only FastifyBaseLogger.
@@ -50,8 +56,36 @@ export type ResSerializerReply<
  */
 export interface FastifyLoggerOptions<
   RawServer extends RawServerBase = RawServerDefault,
-  RawRequest extends FastifyRequest<RouteGenericInterface, RawServer, RawRequestDefaultExpression<RawServer>, FastifySchema, FastifyTypeProvider> = FastifyRequest<RouteGenericInterface, RawServer, RawRequestDefaultExpression<RawServer>, FastifySchema, FastifyTypeProviderDefault>,
-  RawReply extends FastifyReply<RouteGenericInterface, RawServer, RawRequestDefaultExpression<RawServer>, RawReplyDefaultExpression<RawServer>, ContextConfigDefault, FastifySchema, FastifyTypeProvider> = FastifyReply<RouteGenericInterface, RawServer, RawRequestDefaultExpression<RawServer>, RawReplyDefaultExpression<RawServer>, ContextConfigDefault, FastifySchema, FastifyTypeProviderDefault>
+  RawRequest extends FastifyRequest<
+    RouteGenericInterface,
+    RawServer,
+    RawRequestDefaultExpression<RawServer>,
+    FastifySchema,
+    FastifyTypeProvider
+  > = FastifyRequest<
+    RouteGenericInterface,
+    RawServer,
+    RawRequestDefaultExpression<RawServer>,
+    FastifySchema,
+    FastifyTypeProviderDefault
+  >,
+  RawReply extends FastifyReply<
+    RouteGenericInterface,
+    RawServer,
+    RawRequestDefaultExpression<RawServer>,
+    RawReplyDefaultExpression<RawServer>,
+    ContextConfigDefault,
+    FastifySchema,
+    FastifyTypeProvider
+  > = FastifyReply<
+    RouteGenericInterface,
+    RawServer,
+    RawRequestDefaultExpression<RawServer>,
+    RawReplyDefaultExpression<RawServer>,
+    ContextConfigDefault,
+    FastifySchema,
+    FastifyTypeProviderDefault
+  >
 > {
   serializers?: {
     req?: (req: RawRequest) => {
@@ -100,6 +134,6 @@ export interface FastifyChildLoggerFactory<
     logger: Logger,
     bindings: Bindings,
     childLoggerOpts: ChildLoggerOptions,
-    rawReq: RawRequest
-  ): Logger
+    rawReq: RawRequest,
+  ): Logger;
 }

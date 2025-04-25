@@ -58,17 +58,20 @@ test('The request id header key can be customized', (t, done) => {
   fastify.listen({ port: 0 }, (err, address) => {
     t.assert.ifError(err)
 
-    sget({
-      method: 'GET',
-      url: address,
-      headers: {
-        'my-custom-request-id': REQUEST_ID
+    sget(
+      {
+        method: 'GET',
+        url: address,
+        headers: {
+          'my-custom-request-id': REQUEST_ID
+        }
+      },
+      (err, response, body) => {
+        t.assert.ifError(err)
+        t.assert.strictEqual(body.toString(), `{"id":"${REQUEST_ID}"}`)
+        done()
       }
-    }, (err, response, body) => {
-      t.assert.ifError(err)
-      t.assert.strictEqual(body.toString(), `{"id":"${REQUEST_ID}"}`)
-      done()
-    })
+    )
   })
 })
 
@@ -90,17 +93,20 @@ test('The request id header key can be customized', (t, done) => {
   fastify.listen({ port: 0 }, (err, address) => {
     t.assert.ifError(err)
 
-    sget({
-      method: 'GET',
-      url: address,
-      headers: {
-        'MY-CUSTOM-REQUEST-ID': REQUEST_ID
+    sget(
+      {
+        method: 'GET',
+        url: address,
+        headers: {
+          'MY-CUSTOM-REQUEST-ID': REQUEST_ID
+        }
+      },
+      (err, response, body) => {
+        t.assert.ifError(err)
+        t.assert.strictEqual(body.toString(), `{"id":"${REQUEST_ID}"}`)
+        done()
       }
-    }, (err, response, body) => {
-      t.assert.ifError(err)
-      t.assert.strictEqual(body.toString(), `{"id":"${REQUEST_ID}"}`)
-      done()
-    })
+    )
   })
 })
 
@@ -122,16 +128,19 @@ test('The request id header key can be customized', (t, done) => {
   fastify.listen({ port: 0 }, (err, address) => {
     t.assert.ifError(err)
 
-    sget({
-      method: 'GET',
-      url: address,
-      headers: {
-        'MY-CUSTOM-REQUEST-ID': REQUEST_ID
+    sget(
+      {
+        method: 'GET',
+        url: address,
+        headers: {
+          'MY-CUSTOM-REQUEST-ID': REQUEST_ID
+        }
+      },
+      (err, response, body) => {
+        t.assert.ifError(err)
+        t.assert.strictEqual(body.toString(), `{"id":"${REQUEST_ID}"}`)
+        done()
       }
-    }, (err, response, body) => {
-      t.assert.ifError(err)
-      t.assert.strictEqual(body.toString(), `{"id":"${REQUEST_ID}"}`)
-      done()
-    })
+    )
   })
 })

@@ -1,13 +1,13 @@
 <h1 align="center">Fastify</h1>
 
 ## Lifecycle
+
 <a id="lifecycle"></a>
 
 This schema shows the internal lifecycle of Fastify.
 
-The right branch of each section shows the next phase of the lifecycle. The left
-branch shows the corresponding error code generated if the parent throws an
-error. All errors are automatically handled by Fastify.
+The right branch of each section shows the next phase of the lifecycle. The left branch shows the corresponding error
+code generated if the parent throws an error. All errors are automatically handled by Fastify.
 
 ```
 Incoming Request
@@ -42,13 +42,14 @@ Incoming Request
 ```
 
 Before or during the `User Handler`, `reply.hijack()` can be called to:
+
 - Prevent Fastify from running subsequent hooks and the user handler
 - Prevent Fastify from sending the response automatically
 
-If `reply.raw` is used to send a response, `onResponse` hooks will still
-be executed.
+If `reply.raw` is used to send a response, `onResponse` hooks will still be executed.
 
 ## Reply Lifecycle
+
 <a id="reply-lifecycle"></a>
 
 When the user handles the request, the result may be:
@@ -56,8 +57,7 @@ When the user handles the request, the result may be:
 - In an async handler: it returns a payload or throws an `Error`
 - In a sync handler: it sends a payload or an `Error` instance
 
-If the reply was hijacked, all subsequent steps are skipped. Otherwise, when
-submitted, the data flow is as follows:
+If the reply was hijacked, all subsequent steps are skipped. Otherwise, when submitted, the data flow is as follows:
 
 ```
                         ★ schema validation Error
@@ -78,7 +78,7 @@ submitted, the data flow is as follows:
 ```
 
 `reply sent` means the JSON payload will be serialized by one of the following:
+
 - The [reply serializer](./Server.md#setreplyserializer) if set
-- The [serializer compiler](./Server.md#setserializercompiler) if a JSON schema
-  is set for the HTTP status code
+- The [serializer compiler](./Server.md#setserializercompiler) if a JSON schema is set for the HTTP status code
 - The default `JSON.stringify` function

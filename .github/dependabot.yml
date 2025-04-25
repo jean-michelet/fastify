@@ -1,51 +1,51 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     commit-message:
       # Prefix all commit messages with "chore: "
-      prefix: "chore"
+      prefix: 'chore'
     schedule:
-      interval: "monthly"
+      interval: 'monthly'
     open-pull-requests-limit: 10
 
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     commit-message:
       # Prefix all commit messages with "chore: "
-      prefix: "chore"
+      prefix: 'chore'
     schedule:
-      interval: "monthly"
+      interval: 'monthly'
     open-pull-requests-limit: 10
     groups:
       # Production dependencies without breaking changes
       dependencies:
-        dependency-type: "production"
+        dependency-type: 'production'
         update-types:
-        - "minor"
-        - "patch"
+          - 'minor'
+          - 'patch'
       # Production dependencies with breaking changes
       dependencies-major:
-        dependency-type: "production"
+        dependency-type: 'production'
         update-types:
-        - "major"
+          - 'major'
       # ESLint related dependencies
       dev-dependencies-eslint:
         patterns:
-          - "eslint"
-          - "neostandard"
-          - "@stylistic/*"
+          - 'eslint'
+          - 'neostandard'
+          - '@stylistic/*'
       # TypeScript related dependencies
       dev-dependencies-typescript:
         patterns:
-          - "@types/*"
-          - "tsd"
-          - "typescript"
+          - '@types/*'
+          - 'tsd'
+          - 'typescript'
       # Ajv related dependencies
       dev-dependencies-ajv:
         patterns:
-          - "ajv"
-          - "ajv-*"
+          - 'ajv'
+          - 'ajv-*'
     ignore:
-        - dependency-name: tap
-          update-types: ["version-update:semver-major"]
+      - dependency-name: tap
+        update-types: ['version-update:semver-major']

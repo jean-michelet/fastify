@@ -3,7 +3,7 @@
 const { test } = require('node:test')
 const Fastify = require('..')
 
-test('should remove content-type for setErrorHandler', async t => {
+test('should remove content-type for setErrorHandler', async (t) => {
   t.plan(8)
   let count = 0
 

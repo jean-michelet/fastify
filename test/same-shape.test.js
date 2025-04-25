@@ -1,124 +1,124 @@
-'use strict'
+'use strict';
 
-const { test } = require('node:test')
-const fastify = require('..')
+const { test } = require('node:test');
+const fastify = require('..');
 
 test('same shape on Request', async (t) => {
-  t.plan(1)
+  t.plan(1);
 
-  const app = fastify()
+  const app = fastify();
 
-  let request
+  let request;
 
-  app.decorateRequest('user')
+  app.decorateRequest('user');
 
   app.addHook('preHandler', (req, reply, done) => {
     if (request) {
-      req.user = 'User'
+      req.user = 'User';
     }
-    done()
-  })
+    done();
+  });
 
   app.get('/', (req, reply) => {
     if (request) {
-      t.assert.deepStrictEqual(request, req)
+      t.assert.deepStrictEqual(request, req);
     }
 
-    request = req
+    request = req;
 
-    return 'hello world'
-  })
+    return 'hello world';
+  });
 
-  await app.inject('/')
-  await app.inject('/')
-})
+  await app.inject('/');
+  await app.inject('/');
+});
 
 test('same shape on Request when object', async (t) => {
-  t.plan(1)
+  t.plan(1);
 
-  const app = fastify()
+  const app = fastify();
 
-  let request
+  let request;
 
-  app.decorateRequest('object', null)
+  app.decorateRequest('object', null);
 
   app.addHook('preHandler', (req, reply, done) => {
     if (request) {
-      req.object = {}
+      req.object = {};
     }
-    done()
-  })
+    done();
+  });
 
   app.get('/', (req, reply) => {
     if (request) {
-      t.assert.deepStrictEqual(request, req)
+      t.assert.deepStrictEqual(request, req);
     }
 
-    request = req
+    request = req;
 
-    return 'hello world'
-  })
+    return 'hello world';
+  });
 
-  await app.inject('/')
-  await app.inject('/')
-})
+  await app.inject('/');
+  await app.inject('/');
+});
 
 test('same shape on Reply', async (t) => {
-  t.plan(1)
+  t.plan(1);
 
-  const app = fastify()
+  const app = fastify();
 
-  let _reply
+  let _reply;
 
-  app.decorateReply('user')
+  app.decorateReply('user');
 
   app.addHook('preHandler', (req, reply, done) => {
     if (_reply) {
-      reply.user = 'User'
+      reply.user = 'User';
     }
-    done()
-  })
+    done();
+  });
 
   app.get('/', (req, reply) => {
     if (_reply) {
-      t.assert.deepStrictEqual(_reply, reply)
+      t.assert.deepStrictEqual(_reply, reply);
     }
 
-    _reply = reply
+    _reply = reply;
 
-    return 'hello world'
-  })
+    return 'hello world';
+  });
 
-  await app.inject('/')
-  await app.inject('/')
-})
+  await app.inject('/');
+  await app.inject('/');
+});
 
 test('same shape on Reply when object', async (t) => {
-  t.plan(1)
+  t.plan(1);
 
-  const app = fastify()
+  const app = fastify();
 
-  let _reply
+  let _reply;
 
-  app.decorateReply('object', null)
+  app.decorateReply('object', null);
 
   app.addHook('preHandler', (req, reply, done) => {
     if (_reply) {
-      reply.object = {}
+      reply.object = {};
     }
-    done()
-  })
+    done();
+  });
 
   app.get('/', (req, reply) => {
     if (_reply) {
-      t.assert.deepStrictEqual(_reply, reply)
+      t.assert.deepStrictEqual(_reply, reply);
     }
 
-    _reply = reply
+    _reply = reply;
 
-    return 'hello world'
-  })
+    return 'hello world';
+  });
 
-  await app.inject('/')
-  await app.inject('/')
-})
+  await app.inject('/');
+  await app.inject('/');
+});
