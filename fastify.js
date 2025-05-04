@@ -56,7 +56,6 @@ const { defaultInitOptions } = getSecuredInitialConfig
 
 const {
   FST_ERR_ASYNC_CONSTRAINT,
-  FST_ERR_BAD_URL,
   FST_ERR_FORCE_CLOSE_CONNECTIONS_IDLE_NOT_AVAILABLE,
   FST_ERR_OPTIONS_NOT_OBJ,
   FST_ERR_QSP_NOT_FN,
@@ -159,7 +158,6 @@ function fastify (options) {
   // Default router
   const router = buildRouting({
     config: {
-      onBadUrl,
       constraints: options.constraints,
       ignoreTrailingSlash: options.ignoreTrailingSlash || defaultInitOptions.ignoreTrailingSlash,
       ignoreDuplicateSlashes: options.ignoreDuplicateSlashes || defaultInitOptions.ignoreDuplicateSlashes,
@@ -474,7 +472,9 @@ function fastify (options) {
     hasLogger,
     setupResponseListeners,
     throwIfAlreadyStarted,
-    keepAliveConnections
+    keepAliveConnections,
+    frameworkErrors,
+    onBadUrlContext
   })
 
   setupClientErrorHandler(fastify, {
@@ -502,28 +502,6 @@ function fastify (options) {
   // Used exclusively in TypeScript contexts to enable auto type inference from JSON schema.
   function withTypeProvider () {
     return this
-  }
-
-  function onBadUrl (path, req, res) {
-    if (frameworkErrors) {
-      const id = getGenReqId(onBadUrlContext.server, req)
-      const childLogger = createChildLogger(onBadUrlContext, logger, req, id)
-
-      const request = new Request(id, null, req, null, childLogger, onBadUrlContext)
-      const reply = new Reply(res, request, childLogger)
-
-      if (disableRequestLogging === false) {
-        childLogger.info({ req: request }, 'incoming request')
-      }
-
-      return frameworkErrors(new FST_ERR_BAD_URL(path), request, reply)
-    }
-    const body = `{"error":"Bad Request","code":"FST_ERR_BAD_URL","message":"'${path}' is not a valid url component","statusCode":400}`
-    res.writeHead(400, {
-      'Content-Type': 'application/json',
-      'Content-Length': body.length
-    })
-    res.end(body)
   }
 
   function buildAsyncConstraintCallback (isAsync, req, res) {
